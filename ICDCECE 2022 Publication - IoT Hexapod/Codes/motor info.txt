@@ -1,0 +1,8 @@
+foot servos motion limit - 30 to 150
+thigh servo motion limit - 45 to 135
+hip servo motion limit - 60 to 120
+
+Stable pose: 
+hip: 90
+Thigh: 90
+foot: 120
