@@ -1,0 +1,60 @@
+A51 MACRO ASSEMBLER  TASK5_2                                                              10/22/2020 20:05:52 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\Task5_2.obj
+ASSEMBLER INVOKED BY: F:\Keil MicroVision\C51\BIN\A51.EXE Task5_2.asm SET(SMALL) DEBUG PRINT(.\Listings\Task5_2.lst) OBJ
+                      ECT(.\Objects\Task5_2.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1              ORG 0000H
+0000 020030            2              LJMP MAIN
+001B                   3              ORG 001BH
+001B 802A              4              JMP ISR_T1
+0030                   5              ORG 0030H
+0030 758910            6     MAIN:MOV TMOD,#10H
+0033 7580FF            7          MOV P0,#0FFH
+0036 758B18            8          MOV TL1, #018H
+0039 758DFC            9          MOV TH1, #0FCH
+003C 75A888           10          MOV IE, #88H
+003F D28E             11          SETB TR1
+0041 E580             12     BACK:MOV A,P0
+0043 F590             13          MOV P1,A
+0045 80FA             14          SJMP BACK
+0047 C28E             15     ISR_T1:CLR TR1
+0049 7A04             16              MOV R2,#4
+004B C2A1             17          CLR P2.1
+004D DAFE             18     HERE:DJNZ R2,HERE
+004F 758B18           19          MOV TL1,#18H
+0052 758DFC           20          MOV TH1,#0FCH
+0055 D28E             21          SETB TR1
+0057 D2A1             22          SETB P2.1
+0059 32               23          RETI
+                      24          END
+A51 MACRO ASSEMBLER  TASK5_2                                                              10/22/2020 20:05:52 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+BACK . . . . . . .  C ADDR   0041H   A   
+HERE . . . . . . .  C ADDR   004DH   A   
+IE . . . . . . . .  D ADDR   00A8H   A   
+ISR_T1 . . . . . .  C ADDR   0047H   A   
+MAIN . . . . . . .  C ADDR   0030H   A   
+P0 . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . .  D ADDR   00A0H   A   
+TH1. . . . . . . .  D ADDR   008DH   A   
+TL1. . . . . . . .  D ADDR   008BH   A   
+TMOD . . . . . . .  D ADDR   0089H   A   
+TR1. . . . . . . .  B ADDR   0088H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

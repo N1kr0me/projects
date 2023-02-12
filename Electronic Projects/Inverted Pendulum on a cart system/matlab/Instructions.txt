@@ -1,0 +1,9 @@
+Follow the below instructions to run the MATLAB CODE and the GUI animation.
+
+1. Just copy the files which contains two ".m" files and one ".fig" file and paste the folder into any of the local disk drives.
+2. Now open MATLAB and press "open" button in the MATLAB window and select the above folder name and select the two ".m" files having name "InvertedPendulum.m" 
+and "inv_pend_ani.m" and then press the "open" button and so in the MATLAB Editor window two ".m" files will be opened containing the MATLAB code.
+3. Now, go to the "EDITOR" option in the MATLAB window and press the "Run" button for both ".m" files respectively.
+4. And then , the desired outputs and graphs will be obtained and also GUI animation window will be opened , so just feed the desired input values in GUI window to obtain the animation . 
+5. In the GUI window first of all mark the "Reference Input" checkbox to correct steady-state errors common to full-state feedback systems and also for better visualization of the "Pendulum Angle" vs "Cart Position" graph plotting.
+6. Further , detailed instructions about GUI Animation have been provided in the page no. "24" of the project report.

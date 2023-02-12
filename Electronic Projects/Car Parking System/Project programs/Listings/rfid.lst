@@ -1,0 +1,247 @@
+C51 COMPILER V9.60.0.0   RFID                                                              10/05/2020 18:02:55 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE RFID
+OBJECT MODULE PLACED IN .\Objects\rfid.obj
+COMPILER INVOKED BY: F:\Keil MicroVision\C51\BIN\C51.EXE rfid.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\rfid.lst) TABS(2) OBJECT(.\Objects\rfid.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          sbit doorp=P2^0;
+   3          sbit doorn=P2^1;
+   4          sbit rs=P2^5;
+   5          sbit rw=P2^6;
+   6          sbit en=P2^7;
+   7          void lcddat(unsigned char);
+   8          void lcdcmd(unsigned char);
+   9          void lcddis(unsigned char *);
+  10          void lcd_init();
+  11          void serial_init();
+  12          void check();
+  13          void delay();
+  14          void mdelay();
+  15          unsigned char rfid[12],v1;
+  16          void main ()
+  17          {
+  18   1        doorp=doorn=0;
+  19   1        serial_init();
+  20   1        lcd_init();
+  21   1        lcddis("RFID BASED CAR");
+  22   1        lcdcmd(0xc0);
+  23   1        lcddis("PARKING SYSTEM");
+  24   1        delay();
+  25   1        delay();
+  26   1        lcdcmd(0x01);
+  27   1        while(1)
+  28   1        {
+  29   2          lcdcmd(0x01);
+  30   2          lcddis("SWIPE YOUR CARD");
+  31   2          for(v1=0;v1<12;v1++)
+  32   2          {
+  33   3            while(RI==0);
+  34   3            rfid[v1]=SBUF;
+  35   3            RI=0;
+  36   3            SBUF=rfid[v1];
+  37   3            while(TI==0);
+  38   3            TI=0;
+  39   3          }
+  40   2          check();
+  41   2        }
+  42   1      }
+  43          void check()
+  44          {
+  45   1      //1A3465B89356- SHARMA SLOT, 3245FR6786A1-MURTHY SLOT
+  46   1      //234R56Y71297-KHAN SLOT, 145678HA34EC - REDDY SLOT
+  47   1        if(rfid[0]=='1'&&rfid[1]=='A'&&rfid[2]=='3'&&rfid[3]=='4'&&rfid[4]=='6'&& rfid[5]=='5'&&rfid[6]=='B'&& rf
+             -id[7]=='8'&&rfid[8]=='9'&&rfid[9]=='3'&&rfid[10]=='5'&&rfid[11]=='6')
+  48   1        {
+  49   2          lcdcmd(0x01);
+  50   2          lcddis("ASSOCIATION MEMBER");
+  51   2          lcdcmd(0xc0);
+  52   2          lcddis("SHARMA- SLOT 101");
+  53   2          delay();
+C51 COMPILER V9.60.0.0   RFID                                                              10/05/2020 18:02:55 PAGE 2   
+
+  54   2          delay();
+  55   2          lcdcmd(0x01);
+  56   2          doorp=1;
+  57   2          doorn=0;
+  58   2          lcddis("DOOR OPENING"); 
+  59   2          lcdcmd(0xc0);
+  60   2          lcddis("ALLOW INSIDE");
+  61   2          mdelay();
+  62   2          doorp=0;
+  63   2          doorn=0;
+  64   2          delay(); 
+  65   2          lcdcmd(0x01);
+  66   2          doorp=0;
+  67   2          doorn=1; 
+  68   2          lcddis("DOOR CLOSING"); 
+  69   2          mdelay();
+  70   2          doorp=0;
+  71   2          doorn=0;
+  72   2        }
+  73   1        else if(rfid[0]=='3'&&rfid[1]=='2'&&rfid[2]=='4'&&rfid[3]=='5'&&rfid[4]=='F'&&rfid[5]=='R'&&rfid[6]=='6'&
+             -&rfid[7]=='7'&&rfid[8]=='8'&&rfid[9]=='6'&&rfid[10]=='A'&&rfid[11]=='1')
+  74   1        {
+  75   2          lcdcmd(0x01);
+  76   2          lcddis("ASSOCIATION MEMBER");
+  77   2          lcdcmd(0xc00);
+  78   2          lcddis("MURTHY- SLOT 105");
+  79   2          delay();
+  80   2          delay();
+  81   2          lcdcmd(0x01);
+  82   2          doorp=1;
+  83   2          doorn=0;
+  84   2          lcddis("DOOR OPENING"); 
+  85   2          lcdcmd(0xc0);
+  86   2          lcddis("ALLOW INSIDE");
+  87   2          mdelay ();
+  88   2          doorp=0;
+  89   2          doorn=0;
+  90   2          delay(); 
+  91   2          lcdcmd(0x01);
+  92   2          doorp=0;
+  93   2          doorn=1; 
+  94   2          lcddis("DOOR CLOSING"); 
+  95   2          mdelay ();
+  96   2          doorp=0; 
+  97   2          doorn=0;
+  98   2        }
+  99   1        else if(rfid[0]=='2'&&rfid[1]=='3'&&rfid[2]=='4'&&rfid[3]=='R'&&rfid[4]=='5'&& rfid[5]=='6'&&rfid[6]=='Y'
+             -&&rfid[7]=='7'&&rfid[8]=='1'&&rfid[9]=='2'&&rfid[10]=='9'&&rfid[11]=='7')
+ 100   1        {
+ 101   2          lcdcmd(0x01);
+ 102   2          lcddis("ASSOCIATION MEMBER");
+ 103   2          lcdcmd(0xc0);
+ 104   2          lcddis("KHAN- SLOT 405");
+ 105   2          delay();
+ 106   2          delay();
+ 107   2          lcdcmd(0x01);
+ 108   2          doorp=1;
+ 109   2          doorn=0;
+ 110   2          lcddis("DOOR OPENING"); 
+ 111   2          lcdcmd(0xc0);
+ 112   2          lcddis("ALLOW INSIDE");
+ 113   2          mdelay();
+C51 COMPILER V9.60.0.0   RFID                                                              10/05/2020 18:02:55 PAGE 3   
+
+ 114   2          doorp=0;
+ 115   2          doorn=0;
+ 116   2          delay(); 
+ 117   2          lcdcmd(0x01);
+ 118   2          doorp=0;
+ 119   2          doorn=1; 
+ 120   2          lcddis("DOOR CLOSING"); 
+ 121   2          mdelay ();
+ 122   2          doorp=0; 
+ 123   2          doorn=0;
+ 124   2        }
+ 125   1        else if(rfid[0]=='1'&&rfid[1]=='4'&&rfid[2]=='5'&&rfid[3]=='6'&&rfid[4]=='7'&& rfid[5]=='8'&&rfid[6]=='H'
+             -&&rfid[7]=='A'&&rfid[8]=='3'&&rfid[9]=='4'&&rfid[10]=='E'&&rfid[11]=='C')
+ 126   1        {
+ 127   2          lcdcmd(0x01);
+ 128   2          lcddis("ASSOCIATION MEMBER");
+ 129   2          lcdcmd(0xc0);
+ 130   2          lcddis("REDDY- SLOT 103");
+ 131   2          delay();
+ 132   2          delay();
+ 133   2          lcdcmd(0x01);
+ 134   2          doorp=1;
+ 135   2          doorn=0;
+ 136   2          lcddis("DOOR OPENING"); 
+ 137   2          lcdcmd(0xc0);
+ 138   2          lcddis("ALLOW INSIDE");
+ 139   2          mdelay ();
+ 140   2          doorp=0;
+ 141   2          doorn=0;
+ 142   2          delay(); 
+ 143   2          lcdcmd(0x01);
+ 144   2          doorp=0;
+ 145   2          doorn=1; 
+ 146   2          lcddis("DOOR CLOSING"); 
+ 147   2          mdelay();
+ 148   2          doorp=0; 
+ 149   2          doorn=0;
+ 150   2        }
+ 151   1        else
+ 152   1        {
+ 153   2          lcdcmd(0x01);
+ 154   2          lcddis("OUTSIDE PERSON");
+ 155   2          lcdcmd(0xc0);                                 //__asm error
+ 156   2          lcddis("NO SLOT FOR YOU");
+ 157   2          mdelay();
+ 158   2        }
+ 159   1      }
+ 160          void lcd_init()
+ 161          {
+ 162   1        lcdcmd(0x38);
+ 163   1        lcdcmd(0x01);
+ 164   1        lcdcmd(0x10);
+ 165   1        lcdcmd(0x0c);
+ 166   1        lcdcmd(0x80);
+ 167   1      }
+ 168          void lcdcmd(unsigned char val)
+ 169          {
+ 170   1        P1=val;
+ 171   1        rs=0;
+ 172   1        rw=0;
+ 173   1        en=1;
+ 174   1        delay();
+C51 COMPILER V9.60.0.0   RFID                                                              10/05/2020 18:02:55 PAGE 4   
+
+ 175   1        en=0;
+ 176   1      }
+ 177          void lcddat(unsigned char val)
+ 178          {
+ 179   1        P1=val;
+ 180   1        rs=1;
+ 181   1        rw=0;
+ 182   1        en=1;
+ 183   1        delay();
+ 184   1        en=0;
+ 185   1      }
+ 186          void delay()
+ 187          {
+ 188   1        unsigned int v5;
+ 189   1        for(v5=0;v5<6000;v5++);
+ 190   1      }
+ 191          void lcddis(unsigned char *s)
+ 192          {
+ 193   1        unsigned char w;
+ 194   1        for(w=0;s[w]!='\0';w++)
+ 195   1        {
+ 196   2          lcddat(s[w]);
+ 197   2        }
+ 198   1      }
+ 199          void serial_init()
+ 200          {
+ 201   1        SCON=0x50;
+ 202   1        TMOD=0x20;
+ 203   1        TH1=-3; //baud rate 9600
+ 204   1        TR1=1;
+ 205   1      }
+ 206          void mdelay()
+ 207          {
+ 208   1        unsigned int v6,v7;
+ 209   1        for(v6=0;v6<2;v6++)
+ 210   1        {
+ 211   2          for(v7=0;v7<60000;v7++);
+ 212   2        }
+ 213   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    774    ----
+   CONSTANT SIZE    =    200    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

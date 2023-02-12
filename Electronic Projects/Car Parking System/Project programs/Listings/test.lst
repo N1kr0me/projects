@@ -1,0 +1,341 @@
+C51 COMPILER V9.60.0.0   TEST                                                              10/05/2020 19:12:11 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TEST
+OBJECT MODULE PLACED IN .\Objects\test.obj
+COMPILER INVOKED BY: F:\Keil MicroVision\C51\BIN\C51.EXE test.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\test.lst) TABS(2) OBJECT(.\Objects\test.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          sbit doorp=P2^0;
+   3          sbit doorn=P2^1;
+   4          sbit rs=P2^5;
+   5          sbit rw=P2^6;
+   6          sbit en=P2^7;
+   7          void lcddat(unsigned char);
+   8          void lcdcmd(unsigned char);
+   9          void lcddis(unsigned char *);
+  10          void lcd_init();
+  11          void serial_init();
+  12          void check();
+  13          void delay();
+  14          void mdelay();
+  15          unsigned char rfid[12],v1;
+  16          
+  17          sbit IR1=P0^0;
+  18          sbit IR2=P0^1;
+  19          sbit IR3=P0^2;
+  20          sbit IR4=P0^3;
+  21          sbit slot1=P0^4;
+  22          sbit slot2=P0^5;
+  23          sbit slot3=P0^6;
+  24          sbit slot4=P0^7;
+  25          sfr LCD=0xB0;
+  26          void lcddata(unsigned char c);
+  27          void printstring(unsigned char ch[]);
+  28          void msdelay(unsigned int i);
+  29          
+  30          void main ()
+  31          {
+  32   1        doorp=doorn=0;
+  33   1        serial_init();
+  34   1        lcd_init();
+  35   1        lcddis("RFID BASED CAR");
+  36   1        lcdcmd(0xc0);
+  37   1        lcddis("PARKING SYSTEM");
+  38   1        delay();
+  39   1        delay();
+  40   1        lcdcmd(0x01);
+  41   1        while(1)
+  42   1        {
+  43   2          lcdcmd(0x01);
+  44   2          lcddis("SWIPE YOUR CARD");
+  45   2          for(v1=0;v1<12;v1++)
+  46   2          {
+  47   3            while(RI==0);
+  48   3            rfid[v1]=SBUF;
+  49   3            RI=0;
+  50   3            SBUF=rfid[v1];
+  51   3            while(TI==0);
+  52   3            TI=0;
+  53   3          }
+  54   2          check();
+C51 COMPILER V9.60.0.0   TEST                                                              10/05/2020 19:12:11 PAGE 2   
+
+  55   2        }
+  56   1      }
+  57          void check()
+  58          {
+  59   1      //1A3465B89356- SHARMA SLOT, 3245FR6786A1-MURTHY SLOT
+  60   1      //234R56Y71297-KHAN SLOT, 145678HA34EC - REDDY SLOT
+  61   1        if(rfid[0]=='1'&&rfid[1]=='A'&&rfid[2]=='3'&&rfid[3]=='4'&&rfid[4]=='6'&& rfid[5]=='5'&&rfid[6]=='B'&& rf
+             -id[7]=='8'&&rfid[8]=='9'&&rfid[9]=='3'&&rfid[10]=='5'&&rfid[11]=='6')
+  62   1        {
+  63   2          lcdcmd(0x01);
+  64   2          lcddis("ASSOCIATION MEMBER");
+  65   2          lcdcmd(0xc0);
+  66   2          lcddis("SHARMA- SLOT 101");
+  67   2          delay();
+  68   2          delay();
+  69   2          lcdcmd(0x01);
+  70   2          doorp=1;
+  71   2          doorn=0;
+  72   2          lcddis("DOOR OPENING"); 
+  73   2          lcdcmd(0xc0);
+  74   2          lcddis("ALLOW INSIDE");
+  75   2          mdelay();
+  76   2          doorp=0;
+  77   2          doorn=0;
+  78   2          delay(); 
+  79   2          lcdcmd(0x01);
+  80   2          doorp=0;
+  81   2          doorn=1; 
+  82   2          lcddis("DOOR CLOSING"); 
+  83   2          mdelay();
+  84   2          doorp=0;
+  85   2          doorn=0;
+  86   2        }
+  87   1        else if(rfid[0]=='3'&&rfid[1]=='2'&&rfid[2]=='4'&&rfid[3]=='5'&&rfid[4]=='F'&&rfid[5]=='R'&&rfid[6]=='6'&
+             -&rfid[7]=='7'&&rfid[8]=='8'&&rfid[9]=='6'&&rfid[10]=='A'&&rfid[11]=='1')
+  88   1        {
+  89   2          lcdcmd(0x01);
+  90   2          lcddis("ASSOCIATION MEMBER");
+  91   2          lcdcmd(0xc00);
+  92   2          lcddis("MURTHY- SLOT 105");
+  93   2          delay();
+  94   2          delay();
+  95   2          lcdcmd(0x01);
+  96   2          doorp=1;
+  97   2          doorn=0;
+  98   2          lcddis("DOOR OPENING"); 
+  99   2          lcdcmd(0xc0);
+ 100   2          lcddis("ALLOW INSIDE");
+ 101   2          mdelay();
+ 102   2          doorp=0;
+ 103   2          doorn=0;
+ 104   2          delay(); 
+ 105   2          lcdcmd(0x01);
+ 106   2          doorp=0;
+ 107   2          doorn=1; 
+ 108   2          lcddis("DOOR CLOSING"); 
+ 109   2          mdelay();
+ 110   2          doorp=0; 
+ 111   2          doorn=0;
+ 112   2        }
+ 113   1        else if(rfid[0]=='2'&&rfid[1]=='3'&&rfid[2]=='4'&&rfid[3]=='R'&&rfid[4]=='5'&& rfid[5]=='6'&&rfid[6]=='Y'
+             -&&rfid[7]=='7'&&rfid[8]=='1'&&rfid[9]=='2'&&rfid[10]=='9'&&rfid[11]=='7')
+C51 COMPILER V9.60.0.0   TEST                                                              10/05/2020 19:12:11 PAGE 3   
+
+ 114   1        {
+ 115   2          lcdcmd(0x01);
+ 116   2          lcddis("ASSOCIATION MEMBER");
+ 117   2          lcdcmd(0xc0);
+ 118   2          lcddis("KHAN- SLOT 405");
+ 119   2          delay();
+ 120   2          delay();
+ 121   2          lcdcmd(0x01);
+ 122   2          doorp=1;
+ 123   2          doorn=0;
+ 124   2          lcddis("DOOR OPENING"); 
+ 125   2          lcdcmd(0xc0);
+ 126   2          lcddis("ALLOW INSIDE");
+ 127   2          mdelay();
+ 128   2          doorp=0;
+ 129   2          doorn=0;
+ 130   2          delay(); 
+ 131   2          lcdcmd(0x01);
+ 132   2          doorp=0;
+ 133   2          doorn=1; 
+ 134   2          lcddis("DOOR CLOSING"); 
+ 135   2          mdelay();
+ 136   2          doorp=0; doorn=0;
+ 137   2        }
+ 138   1        else if(rfid[0]=='1'&&rfid[1]=='4'&&rfid[2]=='5'&&rfid[3]=='6'&&rfid[4]=='7'&& rfid[5]=='8'&&rfid[6]=='H'
+             -&&rfid[7]=='A'&&rfid[8]=='3'&&rfid[9]=='4'&&rfid[10]=='E'&&rfid[11]=='C')
+ 139   1        {
+ 140   2          lcdcmd(0x01);
+ 141   2          lcddis("ASSOCIATION MEMBER");
+ 142   2          lcdcmd(0xc0);
+ 143   2          lcddis("REDDY- SLOT 103");
+ 144   2          delay();
+ 145   2          delay();
+ 146   2          lcdcmd(0x01);
+ 147   2          doorp=1;
+ 148   2          doorn=0;
+ 149   2          lcddis("DOOR OPENING"); 
+ 150   2          lcdcmd(0xc0);
+ 151   2          lcddis("ALLOW INSIDE");
+ 152   2          mdelay();
+ 153   2          doorp=0;
+ 154   2          doorn=0;
+ 155   2          delay(); 
+ 156   2          lcdcmd(0x01);
+ 157   2          doorp=0;
+ 158   2          doorn=1; 
+ 159   2          lcddis("DOOR CLOSING"); 
+ 160   2          mdelay();
+ 161   2          doorp=0;
+ 162   2          doorn=0;
+ 163   2        }
+ 164   1        else
+ 165   1        {
+ 166   2          slot1=0;
+ 167   2          slot2=0;
+ 168   2          slot3=0;
+ 169   2          slot4=0;
+ 170   2          lcdcmd(0x38);  // 2 lines 5x7 matrix 
+ 171   2          lcdcmd(0x0C);  //  desplay on cursor blinking
+ 172   2          lcdcmd(0x01);  // clear screen
+ 173   2          lcdcmd(0x06);  //  increment cursor
+ 174   2          while(1)
+C51 COMPILER V9.60.0.0   TEST                                                              10/05/2020 19:12:11 PAGE 4   
+
+ 175   2          {
+ 176   3            if(IR1 == 1)
+ 177   3            {
+ 178   4              slot1=0;
+ 179   4              lcdcmd(0x80);
+ 180   4              printstring("1.filled");
+ 181   4            }
+ 182   3            else
+ 183   3            {
+ 184   4              lcdcmd(0x80);
+ 185   4              printstring("1.empty ");
+ 186   4              slot1=1;
+ 187   4            }
+ 188   3            if(IR2 == 1)
+ 189   3            {
+ 190   4              slot2=0;
+ 191   4              lcdcmd(0x88);
+ 192   4              printstring("2.filled");
+ 193   4            }
+ 194   3            else
+ 195   3            {
+ 196   4              slot2=1;
+ 197   4              lcdcmd(0x88);
+ 198   4              printstring("2.empty ");
+ 199   4            }
+ 200   3            if(IR3 == 1)
+ 201   3            {
+ 202   4              slot3=0;
+ 203   4              lcdcmd(0xC0);
+ 204   4              printstring("3.filled");
+ 205   4            }
+ 206   3            else
+ 207   3            { 
+ 208   4              slot3=1;
+ 209   4              lcdcmd(0xC0);
+ 210   4              printstring("3.empty ");
+ 211   4            }
+ 212   3            if(IR4 == 1)
+ 213   3            {
+ 214   4              slot4=0;
+ 215   4              lcdcmd(0xC8);
+ 216   4              printstring("4.filled");
+ 217   4            }
+ 218   3            else
+ 219   3            {
+ 220   4              slot4=1;
+ 221   4              lcdcmd(0xC8);
+ 222   4              printstring("4.empty ");
+ 223   4            }
+ 224   3          }
+ 225   2        }
+ 226   1      } 
+ 227          void printstring(unsigned char ch[])
+ 228          {
+ 229   1        unsigned int i;
+ 230   1        for(i=0;ch[i] != '\0' ;i++)
+ 231   1        lcddata(ch[i]); 
+ 232   1      }
+ 233          void msdelay(unsigned int i)
+ 234          {
+ 235   1        unsigned int k;
+ 236   1        for(k=0;k<i;k++);
+C51 COMPILER V9.60.0.0   TEST                                                              10/05/2020 19:12:11 PAGE 5   
+
+ 237   1        for(k=0;k<100;k++);
+ 238   1      }
+ 239          void lcddata(unsigned char c);
+ 240          {
+*** ERROR C141 IN LINE 240 OF test.c: syntax error near '{', expected 'hdata'
+ 241            LCD=c;
+*** ERROR C231 IN LINE 241 OF test.c: 'LCD': redefinition
+*** ERROR C202 IN LINE 241 OF test.c: 'c': undefined identifier
+*** ERROR C231 IN LINE 241 OF test.c: 'LCD': redefinition
+ 242            rs=1;
+*** ERROR C231 IN LINE 242 OF test.c: 'rs': redefinition
+*** ERROR C231 IN LINE 242 OF test.c: 'rs': redefinition
+ 243            en=1;
+*** ERROR C231 IN LINE 243 OF test.c: 'en': redefinition
+*** ERROR C231 IN LINE 243 OF test.c: 'en': redefinition
+ 244            msdelay(10);
+*** ERROR C141 IN LINE 244 OF test.c: syntax error near '10', expected 'bit'
+*** ERROR C231 IN LINE 244 OF test.c: '_msdelay': redefinition
+ 245            en=0;
+*** ERROR C279 IN LINE 245 OF test.c: 'en': multiple initialization
+*** ERROR C231 IN LINE 245 OF test.c: 'en': redefinition
+*** ERROR C231 IN LINE 245 OF test.c: 'en': redefinition
+ 246          }
+*** ERROR C141 IN LINE 246 OF test.c: syntax error near '}', expected 'hdata'
+ 247          void lcd_init()
+ 248          {
+ 249   1        lcdcmd(0x38);
+ 250   1        lcdcmd(0x01);
+ 251   1        lcdcmd(0x10);
+ 252   1        lcdcmd(0x0c);
+ 253   1        lcdcmd(0x80);
+ 254   1      }
+ 255          void lcdcmd(unsigned char val)
+ 256          {
+ 257   1        P1=val;
+ 258   1        rs=0;
+ 259   1        rw=0;
+ 260   1        en=1;
+ 261   1        delay();
+ 262   1        en=0;
+ 263   1      }
+ 264          void lcddat(unsigned char val)
+ 265          {
+ 266   1        P1=val;
+ 267   1        rs=1;
+ 268   1        rw=0;
+ 269   1        en=1;
+ 270   1        delay();
+ 271   1        en=0;
+ 272   1      }
+ 273          void delay()
+ 274          {
+ 275   1        unsigned int v5;
+ 276   1        for(v5=0;v5<6000;v5++);
+ 277   1      }
+ 278          void lcddis(unsigned char *s)
+ 279          {
+ 280   1        unsigned char w;
+ 281   1        for(w=0;s[w]!='\0';w++)
+ 282   1        {
+ 283   2          lcddat(s[w]);
+ 284   2        }
+C51 COMPILER V9.60.0.0   TEST                                                              10/05/2020 19:12:11 PAGE 6   
+
+ 285   1      }
+ 286          void serial_init()
+ 287          {
+ 288   1        SCON=0x50;
+ 289   1        TMOD=0x20;
+ 290   1        TH1=-3; //baud rate 9600
+ 291   1        TR1=1;
+ 292   1      }
+ 293          void mdelay()
+ 294          {
+ 295   1        unsigned int v6,v7;
+ 296   1        for(v6=0;v6<2;v6++)
+ 297   1        {
+ 298   2        for(v7=0;v7<60000;v7++);
+ 299   2        }
+ 300   1      }
+ 301          // automatic car parking
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  14 ERROR(S)
