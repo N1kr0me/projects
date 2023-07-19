@@ -25,7 +25,7 @@ int main()
     cout<<"\nYou start with "<<Player_Health<<" Health\n";
   cout<<"You start the fight.\n==========\n";
   while (Player_Health > 0 || Monster_Health > 0) {
-    cout<<"What do you want to do?\n1 - Fierce Attack\n2 - Lithe Attack\n3 - Defensive moves\n";
+    cout<<"What do you want to do?\n1 - Melee Attack\n2 - Magic Attack\n3 - Defend/Parry \n";
      do{cin>>choice;}while(choice>3 || choice<1);
     switch (choice) {
       case 1: 
@@ -131,7 +131,7 @@ int main()
        return 0;
        }
   cout<<"You now have "<<Player_Health<<" Health left.\n\n";
-     cout<<"What do you want to do?\n1 - Fierce Attack\n2 - Lithe Attack\n3 - Defensive moves\n";
+     cout<<"What do you want to do?\n1 - Melee Attack\n2 - Magic Attack\n3 - Defend/Parry \n";
      do{cin>>choice;}while(choice>3 ||  choice<1);
     switch (choice) {
       case 1: 
